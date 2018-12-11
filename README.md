@@ -1,0 +1,2 @@
+# OptimusTraderBot
+BitBay bot
