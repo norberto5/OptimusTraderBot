@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OptimusTraderBot.Connector;
+using OptimusTraderBot.Models;
 using OptimusTraderBot.Settings;
 
 namespace OptimusTraderBot
@@ -20,12 +21,25 @@ namespace OptimusTraderBot
 
 			var apiConnector = new ApiConnector(apiSettings);
 
-			string result =apiConnector.CallApiOperation(ApiMethod.Info, new Dictionary<string, string>()).Result;
-			string json = JToken.Parse(result).ToString(Formatting.Indented);
+			var parameters = new Dictionary<string, string>();
+			string result = apiConnector.CallApiOperation(ApiMethod.Info, parameters).Result;
+			var json = JToken.Parse(result);
+			Console.WriteLine(json.ToString(Formatting.Indented));
+			InfoResult info = json.ToObject<InfoResult>();
 
-			Console.WriteLine(json);
+			if(info.Success)
+			{
+				if(info.Balances.TryGetValue("LSK", out Money lsk))
+				{
+					Console.WriteLine($"LSK: {lsk}");
+				}
+				if(info.Addresses.TryGetValue("BTC", out string btcAddress))
+				{
+					Console.WriteLine(btcAddress);
+				}
+			}
+
 			Console.Read();
 		}
-
 	}
 }
