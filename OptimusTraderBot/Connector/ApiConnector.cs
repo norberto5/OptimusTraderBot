@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using OptimusTraderBot.Settings;
-using System.Net.Http;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
-using System.Net;
+using System.Threading.Tasks;
+using OptimusTraderBot.Settings;
 using OptimusTraderBot.Tools;
 
 namespace OptimusTraderBot.Connector
@@ -23,24 +23,19 @@ namespace OptimusTraderBot.Connector
 			this.apiSettings = apiSettings;
 		}
 
-		public async Task<string> CallApiOperation(ApiMethod method, Dictionary<string, string> parameters)
+		public async Task<string> CallApiOperation(ApiMethod method, Dictionary<string, string> parameters = null)
 		{
-			switch(method)
-			{
-				case ApiMethod.Info:
-					break;
-				default:
-					return null;
-			}
-
 			var postValues = new Dictionary<string, string>
 			{
 				{ "method", method.ToString().ToLower() },
 				{ "moment" , DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString() }
 			};
-			foreach(KeyValuePair<string, string> element in parameters)
+			if(parameters != null)
 			{
-				postValues.Add(element.Key, element.Value);
+				foreach(KeyValuePair<string, string> element in parameters)
+				{
+					postValues.Add(element.Key, element.Value);
+				}
 			}
 
 			string hash = GetHash(postValues);
@@ -69,6 +64,6 @@ namespace OptimusTraderBot.Connector
 			}
 		}
 
-		
+
 	}
 }

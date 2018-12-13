@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using OptimusTraderBot.Connector;
 using OptimusTraderBot.Models;
 using OptimusTraderBot.Settings;
 
 namespace OptimusTraderBot
 {
-	internal class Program
+	internal partial class Program
 	{
 		private static void Main(string[] args)
 		{
@@ -19,14 +15,9 @@ namespace OptimusTraderBot
 			var apiSettings = new ApiSettings();
 			config.GetSection("ApiSettings").Bind(apiSettings);
 
-			var apiConnector = new ApiConnector(apiSettings);
+			var apiManager = new ApiManager(apiSettings);
 
-			var parameters = new Dictionary<string, string>();
-			string result = apiConnector.CallApiOperation(ApiMethod.Info, parameters).Result;
-			var json = JToken.Parse(result);
-			Console.WriteLine(json.ToString(Formatting.Indented));
-			InfoResult info = json.ToObject<InfoResult>();
-
+			InfoResult info = apiManager.GetInfo();
 			if(info.Success)
 			{
 				if(info.Balances.TryGetValue("LSK", out Money lsk))

@@ -5,6 +5,6 @@ namespace OptimusTraderBot.Connector
 {
 	public interface IApiConnector
 	{
-		Task<string> CallApiOperation(ApiMethod method, Dictionary<string, string> parameters);
+		Task<string> CallApiOperation(ApiMethod method, Dictionary<string, string> parameters = null);
 	}
 }
