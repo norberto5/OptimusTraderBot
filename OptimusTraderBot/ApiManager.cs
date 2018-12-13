@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using OptimusTraderBot.Connector;
 using OptimusTraderBot.Models;
 using OptimusTraderBot.Settings;

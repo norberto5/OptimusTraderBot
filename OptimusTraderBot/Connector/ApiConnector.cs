@@ -63,7 +63,5 @@ namespace OptimusTraderBot.Connector
 				return sha512.ComputeHash(Encoding.ASCII.GetBytes(post)).ToHexString();
 			}
 		}
-
-
 	}
 }
