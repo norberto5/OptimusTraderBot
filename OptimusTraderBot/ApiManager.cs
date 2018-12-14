@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OptimusTraderBot.Connector;
@@ -11,6 +12,7 @@ namespace OptimusTraderBot
 {
 	public class ApiManager
 	{
+		private static readonly NumberFormatInfo numberFormat = NumberFormatInfo.InvariantInfo;
 		private readonly IApiConnector apiConnector;
 
 		public ApiManager(ApiSettings apiSettings)
@@ -33,15 +35,29 @@ namespace OptimusTraderBot
 			{
 				{ "type", tradeType.ToString().ToLower() },
 				{ "currency", currency },
-				{ "amount", amount.ToString() },
+				{ "amount", amount.ToString(numberFormat) },
 				{ "payment_currency", paymentCurrency },
-				{ "rate", rate.ToString() }
+				{ "rate", rate.ToString(numberFormat) }
 			};
 
 			string result = apiConnector.CallApiOperation(ApiMethod.Trade, parameters).Result;
 			var json = JToken.Parse(result);
 			Console.WriteLine(json.ToString(Formatting.Indented));
 			TradeResult tradeResult = json.ToObject<TradeResult>();
+
+			if(tradeResult.Success)
+			{
+				Console.WriteLine($"Successfully placed a trade of type {tradeType} of {amount.ToString(numberFormat)} {currency} for {tradeResult.Price.Value.ToString(numberFormat)} {paymentCurrency} (rate: {tradeResult.Rate.Value.ToString(numberFormat)})");
+				if(tradeResult.OrderId != 0)
+				{
+					Console.WriteLine($"Order id: {tradeResult.OrderId}");
+				}
+			}
+			else
+			{
+				Console.WriteLine($"Failed to place a trade of type {tradeType} of {amount.ToString(numberFormat)} {currency}");
+			}
+
 			return tradeResult;
 		}
 	}
