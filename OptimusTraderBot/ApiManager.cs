@@ -47,7 +47,7 @@ namespace OptimusTraderBot
 
 			if(tradeResult.Success)
 			{
-				Console.WriteLine($"Successfully placed a trade of type {tradeType} of {amount.ToString(numberFormat)} {currency} for {tradeResult.Price.Value.ToString(numberFormat)} {paymentCurrency} (rate: {tradeResult.Rate.Value.ToString(numberFormat)})");
+				Console.WriteLine($"Successfully placed a trade of type {tradeType} of {amount.ToString(numberFormat)} {currency} for {tradeResult.Price.ToString(numberFormat)} {paymentCurrency} (rate: {tradeResult.Rate.ToString(numberFormat)})");
 				if(tradeResult.OrderId != 0)
 				{
 					Console.WriteLine($"Order id: {tradeResult.OrderId}");

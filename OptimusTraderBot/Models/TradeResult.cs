@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using OptimusTraderBot.Tools.JsonConverters;
 
 namespace OptimusTraderBot.Models
 {
@@ -10,8 +11,10 @@ namespace OptimusTraderBot.Models
 		[JsonProperty("order_id")]
 		public long OrderId { get; set; }
 		public decimal? Amount { get; set; }
-		public decimal? Rate { get; set; }
-		public decimal? Price { get; set; }
+		[JsonConverter(typeof(DecimalConverter))]
+		public decimal Rate { get; set; }
+		[JsonConverter(typeof(DecimalConverter))]
+		public decimal Price { get; set; }
 		public decimal Fee { get; set; }
 		[JsonProperty("fee_currency")]
 		public string FeeCurrency { get; set; }
