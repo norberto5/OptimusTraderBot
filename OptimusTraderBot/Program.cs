@@ -21,7 +21,7 @@ namespace OptimusTraderBot
 			InfoResult info = apiManager.GetInfo();
 			Console.WriteLine($"Connection to API is {(info.Success ? "OK" : "NOT OK! Something went wrong!")}");
 
-			TradeResult tradeResult = apiManager.Trade(TradeType.Buy, "LSK", 513m, "PLN", 3.33m);
+			TradeResult tradeResult = apiManager.Trade(TradeType.Sell, "LSK", 0.123m, "PLN", 3.55m);
 
 			Console.Read();
 		}

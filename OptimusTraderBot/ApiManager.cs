@@ -47,6 +47,7 @@ namespace OptimusTraderBot
 
 			if(tradeResult.Success)
 			{
+				//TODO: Upgrade message if Bought is not empty etc.
 				Console.WriteLine($"Successfully placed a trade of type {tradeType} of {amount.ToString(numberFormat)} {currency} for {tradeResult.Price.ToString(numberFormat)} {paymentCurrency} (rate: {tradeResult.Rate.ToString(numberFormat)})");
 				if(tradeResult.OrderId != 0)
 				{
