@@ -18,17 +18,7 @@ namespace OptimusTraderBot
 			var apiManager = new ApiManager(apiSettings);
 
 			InfoResult info = apiManager.GetInfo();
-			if(info.Success)
-			{
-				if(info.Balances.TryGetValue("LSK", out Money lsk))
-				{
-					Console.WriteLine($"LSK: {lsk}");
-				}
-				if(info.Addresses.TryGetValue("BTC", out string btcAddress))
-				{
-					Console.WriteLine(btcAddress);
-				}
-			}
+			Console.WriteLine($"Connection to API is {(info.Success ? "OK" : "NOT OK! Something went wrong!")}");
 
 			Console.Read();
 		}
