@@ -5,25 +5,22 @@ using OptimusTraderBot.Settings;
 
 namespace OptimusTraderBot
 {
-	internal partial class Program
+	public class ApiManager
 	{
-		public class ApiManager
+		private readonly IApiConnector apiConnector;
+
+		public ApiManager(ApiSettings apiSettings)
 		{
-			private readonly IApiConnector apiConnector;
+			apiConnector = new ApiConnector(apiSettings);
+		}
 
-			public ApiManager(ApiSettings apiSettings)
-			{
-				apiConnector = new ApiConnector(apiSettings);
-			}
-
-			public InfoResult GetInfo()
-			{
-				string result = apiConnector.CallApiOperation(ApiMethod.Info).Result;
-				var json = JToken.Parse(result);
-				//Console.WriteLine(json.ToString(Formatting.Indented));
-				InfoResult info = json.ToObject<InfoResult>();
-				return info;
-			}
+		public InfoResult GetInfo()
+		{
+			string result = apiConnector.CallApiOperation(ApiMethod.Info).Result;
+			var json = JToken.Parse(result);
+			//Console.WriteLine(json.ToString(Formatting.Indented));
+			InfoResult info = json.ToObject<InfoResult>();
+			return info;
 		}
 	}
 }
