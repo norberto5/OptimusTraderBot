@@ -1,4 +1,4 @@
-﻿namespace OptimusTraderBot
+﻿namespace OptimusTraderBot.Enums
 {
 	public enum ApiMethod
 	{
