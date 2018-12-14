@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
+using OptimusTraderBot.Enums;
 using OptimusTraderBot.Models;
 using OptimusTraderBot.Settings;
 
@@ -19,6 +20,8 @@ namespace OptimusTraderBot
 
 			InfoResult info = apiManager.GetInfo();
 			Console.WriteLine($"Connection to API is {(info.Success ? "OK" : "NOT OK! Something went wrong!")}");
+
+			TradeResult tradeResult = apiManager.Trade(TradeType.Ask, "LSK", 1, "PLN", 5);
 
 			Console.Read();
 		}
