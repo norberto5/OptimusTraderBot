@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using OptimusTraderBot.Connector;
+using OptimusTraderBot.Enums;
 using OptimusTraderBot.Models;
 using OptimusTraderBot.Settings;
 
