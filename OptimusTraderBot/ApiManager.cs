@@ -159,5 +159,28 @@ namespace OptimusTraderBot
 
 			return transferResult;
 		}
+
+		public WithdrawResult Withdraw(string currency, decimal quantity, long accountNumber, bool express, string swiftBicNumber)
+		{
+			var parameters = new Dictionary<string, string>()
+			{
+				{ "currency", currency },
+				{ "quantity", quantity.ToString() },
+				{ "account", accountNumber.ToString() },
+				{ "express", express.ToString().ToLower() },
+				{ "bic", swiftBicNumber },
+			};
+
+			string result = apiConnector.CallApiOperation(ApiMethod.Withdraw, parameters).Result;
+			var json = JToken.Parse(result);
+			Console.WriteLine(json.ToString(Formatting.Indented));
+			WithdrawResult withdrawResult = json.ToObject<WithdrawResult>();
+
+			return withdrawResult;
+
+		}
+
+
+
 	}
 }
