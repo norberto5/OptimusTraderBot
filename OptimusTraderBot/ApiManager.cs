@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using OptimusTraderBot.Connector;
@@ -83,6 +84,37 @@ namespace OptimusTraderBot
 				Console.WriteLine($"Failed to cancel an order of id {cancelResult.OrderId}");
 			}
 			return cancelResult;
+		}
+
+		public OrderBookResult GetOrderBook(string orderCurrency, string paymentCurrency)
+		{
+			var parameters = new Dictionary<string, string>()
+			{
+				{ "order_currency", orderCurrency },
+				{ "payment_currency", paymentCurrency }
+			};
+
+			string result = apiConnector.CallApiOperation(ApiMethod.Orderbook, parameters).Result;
+			var json = JToken.Parse(result);
+			//Console.WriteLine(json.ToString(Formatting.Indented));
+			OrderBookResult orderbookResult = json.ToObject<OrderBookResult>();
+
+			if(orderbookResult.Bids != null && orderbookResult.Bids.Count > 0)
+			{
+				foreach(Order bid in orderbookResult.Bids.OrderBy(b => b.Rate).TakeLast(10))
+				{
+					Console.WriteLine($"Bid/Buy: {bid.ToString()} {orderCurrency} (rate: {bid.Rate})");
+				}
+			}
+			Console.WriteLine(new string('-', 30));
+			if(orderbookResult.Asks != null && orderbookResult.Asks.Count > 0)
+			{
+				foreach(Order ask in orderbookResult.Asks.OrderBy(a => a.Rate).Take(10))
+				{
+					Console.WriteLine($"Ask/Sell: {ask.ToString()} {orderCurrency} (rate: {ask.Rate})");
+				}
+			}
+			return orderbookResult;
 		}
 	}
 }
