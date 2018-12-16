@@ -177,10 +177,27 @@ namespace OptimusTraderBot
 			WithdrawResult withdrawResult = json.ToObject<WithdrawResult>();
 
 			return withdrawResult;
-
 		}
 
+		public List<HistoryEntry> GetHistory(string currency, int limit = 50)
+		{
+			var parameters = new Dictionary<string, string>()
+			{
+				{ "currency", currency },
+				{ "limit", limit.ToString() },
+			};
 
+			string result = apiConnector.CallApiOperation(ApiMethod.History, parameters).Result;
+			var json = JToken.Parse(result);
+			Console.WriteLine(json.ToString(Formatting.Indented));
+			List<HistoryEntry> historyResult = json.ToObject<List<HistoryEntry>>();
 
+			foreach(HistoryEntry entry in historyResult)
+			{
+				Console.WriteLine($"{entry.OperationType} : (amount: {entry.Amount } {entry.Currency}) (balance after: {entry.BalanceAfter} {entry.Currency}) ({entry.Time.ToString(CultureInfo.GetCultureInfo("PL"))})");
+			}
+
+			return historyResult;
+		}
 	}
 }
