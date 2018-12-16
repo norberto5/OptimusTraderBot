@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using OptimusTraderBot.Enums;
 using OptimusTraderBot.Models;
@@ -10,6 +11,8 @@ namespace OptimusTraderBot
 	{
 		private static void Main(string[] args)
 		{
+			CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
+
 			IConfigurationRoot config = new ConfigurationBuilder()
 				.AddJsonFile("appsettings.json", true, true)
 				.Build();

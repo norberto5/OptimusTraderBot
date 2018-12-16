@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -13,7 +12,6 @@ namespace OptimusTraderBot
 {
 	public class ApiManager
 	{
-		private static readonly NumberFormatInfo numberFormat = NumberFormatInfo.InvariantInfo;
 		private readonly IApiConnector apiConnector;
 
 		public ApiManager(ApiSettings apiSettings)
@@ -36,9 +34,9 @@ namespace OptimusTraderBot
 			{
 				{ "type", tradeType.ToString().ToLower() },
 				{ "currency", currency },
-				{ "amount", amount.ToString(numberFormat) },
+				{ "amount", amount.ToString() },
 				{ "payment_currency", paymentCurrency },
-				{ "rate", rate.ToString(numberFormat) }
+				{ "rate", rate.ToString() }
 			};
 
 			string result = apiConnector.CallApiOperation(ApiMethod.Trade, parameters).Result;
@@ -49,7 +47,7 @@ namespace OptimusTraderBot
 			if(tradeResult.Success)
 			{
 				//TODO: Upgrade message if Bought is not empty etc.
-				Console.WriteLine($"Successfully placed a trade of type {tradeType} of {amount.ToString(numberFormat)} {currency} for {tradeResult.Price.ToString(numberFormat)} {paymentCurrency} (rate: {tradeResult.Rate.ToString(numberFormat)})");
+				Console.WriteLine($"Successfully placed a trade of type {tradeType} of {amount} {currency} for {tradeResult.Price} {paymentCurrency} (rate: {tradeResult.Rate})");
 				if(tradeResult.OrderId != 0)
 				{
 					Console.WriteLine($"Order id: {tradeResult.OrderId}");
@@ -57,7 +55,7 @@ namespace OptimusTraderBot
 			}
 			else
 			{
-				Console.WriteLine($"Failed to place a trade of type {tradeType} of {amount.ToString(numberFormat)} {currency}");
+				Console.WriteLine($"Failed to place a trade of type {tradeType} of {amount} {currency}");
 			}
 
 			return tradeResult;
@@ -103,7 +101,7 @@ namespace OptimusTraderBot
 			{
 				foreach(Order bid in orderbookResult.Bids.OrderBy(b => b.Rate).TakeLast(10))
 				{
-					Console.WriteLine($"Bid/Buy: {bid.ToString()} {orderCurrency} (rate: {bid.Rate})");
+					Console.WriteLine($"Bid/Buy: {bid} {orderCurrency} (rate: {bid.Rate})");
 				}
 			}
 			Console.WriteLine(new string('-', 30));
@@ -111,7 +109,7 @@ namespace OptimusTraderBot
 			{
 				foreach(Order ask in orderbookResult.Asks.OrderBy(a => a.Rate).Take(10))
 				{
-					Console.WriteLine($"Ask/Sell: {ask.ToString()} {orderCurrency} (rate: {ask.Rate})");
+					Console.WriteLine($"Ask/Sell: {ask} {orderCurrency} (rate: {ask.Rate})");
 				}
 			}
 			return orderbookResult;
