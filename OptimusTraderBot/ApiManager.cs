@@ -61,5 +61,28 @@ namespace OptimusTraderBot
 
 			return tradeResult;
 		}
+
+		public CancelResult CancelOrder(long orderId)
+		{
+			var parameters = new Dictionary<string, string>()
+			{
+				{ "id", orderId.ToString() }
+			};
+
+			string result = apiConnector.CallApiOperation(ApiMethod.Cancel, parameters).Result;
+			var json = JToken.Parse(result);
+			Console.WriteLine(json.ToString(Formatting.Indented));
+			CancelResult cancelResult = json.ToObject<CancelResult>();
+
+			if(cancelResult.Success)
+			{
+				Console.WriteLine($"Successfully cancelled an order of id {cancelResult.OrderId}");
+			}
+			else
+			{
+				Console.WriteLine($"Failed to cancel an order of id {cancelResult.OrderId}");
+			}
+			return cancelResult;
+		}
 	}
 }
