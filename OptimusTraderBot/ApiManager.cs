@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -113,6 +114,33 @@ namespace OptimusTraderBot
 				}
 			}
 			return orderbookResult;
+		}
+
+		public List<Order> GetOrders(int limit = 50)
+		{
+			var parameters = new Dictionary<string, string>()
+			{
+				{ "limit", limit.ToString() },
+			};
+
+			string result = apiConnector.CallApiOperation(ApiMethod.Orders, parameters).Result;
+			var json = JToken.Parse(result);
+			//Console.WriteLine(json.ToString(Formatting.Indented));
+			List<Order> orders = json.ToObject<List<Order>>();
+
+			foreach(Order order in orders)
+			{
+				string units = order.Units != order.StartUnits
+					? $"{order.Units}/{order.StartUnits} {order.OrderCurrency}"
+					: $"{order.Units} {order.OrderCurrency}";
+				string price = order.CurrentPrice != order.StartPrice
+					? $"{order.CurrentPrice}/{order.StartPrice} {order.PaymentCurrency}"
+					: $"{order.CurrentPrice} {order.PaymentCurrency}";
+
+				Console.WriteLine($"{order.Type} - {units} for {price} ({order.OrderDate.ToString(CultureInfo.GetCultureInfo("PL"))})");
+			}
+
+			return orders;
 		}
 	}
 }
