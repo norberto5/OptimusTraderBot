@@ -142,5 +142,22 @@ namespace OptimusTraderBot
 
 			return orders;
 		}
+
+		public TransferResult Transfer(string currency, decimal quantity, string address)
+		{
+			var parameters = new Dictionary<string, string>()
+			{
+				{ "currency", currency },
+				{ "quantity", quantity.ToString() },
+				{ "address", address },
+			};
+
+			string result = apiConnector.CallApiOperation(ApiMethod.Transfer, parameters).Result;
+			var json = JToken.Parse(result);
+			Console.WriteLine(json.ToString(Formatting.Indented));
+			TransferResult transferResult = json.ToObject<TransferResult>();
+
+			return transferResult;
+		}
 	}
 }
