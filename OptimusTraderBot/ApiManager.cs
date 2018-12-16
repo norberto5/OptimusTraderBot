@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -99,7 +100,7 @@ namespace OptimusTraderBot
 
 			if(orderbookResult.Bids != null && orderbookResult.Bids.Count > 0)
 			{
-				foreach(Order bid in orderbookResult.Bids.OrderBy(b => b.Rate).TakeLast(10))
+				foreach(OrderBookItem bid in orderbookResult.Bids.OrderBy(b => b.Rate).TakeLast(10))
 				{
 					Console.WriteLine($"Bid/Buy: {bid} {orderCurrency} (rate: {bid.Rate})");
 				}
@@ -107,12 +108,39 @@ namespace OptimusTraderBot
 			Console.WriteLine(new string('-', 30));
 			if(orderbookResult.Asks != null && orderbookResult.Asks.Count > 0)
 			{
-				foreach(Order ask in orderbookResult.Asks.OrderBy(a => a.Rate).Take(10))
+				foreach(OrderBookItem ask in orderbookResult.Asks.OrderBy(a => a.Rate).Take(10))
 				{
 					Console.WriteLine($"Ask/Sell: {ask} {orderCurrency} (rate: {ask.Rate})");
 				}
 			}
 			return orderbookResult;
+		}
+
+		public List<Order> GetOrders(int limit = 50)
+		{
+			var parameters = new Dictionary<string, string>()
+			{
+				{ "limit", limit.ToString() },
+			};
+
+			string result = apiConnector.CallApiOperation(ApiMethod.Orders, parameters).Result;
+			var json = JToken.Parse(result);
+			//Console.WriteLine(json.ToString(Formatting.Indented));
+			List<Order> orders = json.ToObject<List<Order>>();
+
+			foreach(Order order in orders)
+			{
+				string units = order.Units != order.StartUnits
+					? $"{order.Units}/{order.StartUnits} {order.OrderCurrency}"
+					: $"{order.Units} {order.OrderCurrency}";
+				string price = order.CurrentPrice != order.StartPrice
+					? $"{order.CurrentPrice}/{order.StartPrice} {order.PaymentCurrency}"
+					: $"{order.CurrentPrice} {order.PaymentCurrency}";
+
+				Console.WriteLine($"{order.Type} - {units} for {price} ({order.OrderDate.ToString(CultureInfo.GetCultureInfo("PL"))})");
+			}
+
+			return orders;
 		}
 	}
 }

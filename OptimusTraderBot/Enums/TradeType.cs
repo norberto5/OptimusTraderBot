@@ -2,9 +2,9 @@
 {
 	public enum TradeType
 	{
-		//Bid,
-		Buy,
-		//Ask,
-		Sell
+		Bid,
+		//Buy,
+		Ask,
+		//Sell
 	}
 }

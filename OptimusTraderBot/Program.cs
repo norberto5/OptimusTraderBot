@@ -31,7 +31,9 @@ namespace OptimusTraderBot
 			//	CancelResult cancelResult = apiManager.CancelOrder(orderId);
 			//}
 
-			apiManager.GetOrderBook("LSK", "PLN");
+			//apiManager.GetOrderBook("LSK", "PLN");
+
+			apiManager.GetOrders();
 
 			Console.Read();
 		}
