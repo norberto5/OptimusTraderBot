@@ -13,6 +13,7 @@ namespace OptimusTraderBot
 {
 	public class ApiManager
 	{
+		private static readonly CultureInfo dateCulture = CultureInfo.GetCultureInfo("PL");
 		private readonly IApiConnector apiConnector;
 
 		public ApiManager(ApiSettings apiSettings)
@@ -137,7 +138,7 @@ namespace OptimusTraderBot
 					? $"{order.CurrentPrice}/{order.StartPrice} {order.PaymentCurrency}"
 					: $"{order.CurrentPrice} {order.PaymentCurrency}";
 
-				Console.WriteLine($"{order.Type} - {units} for {price} (rate: {order.CurrentPrice/order.Units}) ({order.OrderDate.ToString(CultureInfo.GetCultureInfo("PL"))})");
+				Console.WriteLine($"{order.Type} - {units} for {price} (rate: {order.CurrentPrice/order.Units}) ({order.OrderDate.ToString(dateCulture)})");
 			}
 
 			return orders;
@@ -194,7 +195,7 @@ namespace OptimusTraderBot
 
 			foreach(HistoryEntry entry in historyResult)
 			{
-				Console.WriteLine($"{entry.OperationType} : (amount: {entry.Amount } {entry.Currency}) (balance after: {entry.BalanceAfter} {entry.Currency}) ({entry.Time.ToString(CultureInfo.GetCultureInfo("PL"))})");
+				Console.WriteLine($"{entry.OperationType} : (amount: {entry.Amount } {entry.Currency}) (balance after: {entry.BalanceAfter} {entry.Currency}) ({entry.Time.ToString(dateCulture)})");
 			}
 
 			return historyResult;
