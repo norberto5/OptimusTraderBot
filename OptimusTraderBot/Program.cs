@@ -21,12 +21,14 @@ namespace OptimusTraderBot
 			InfoResult info = apiManager.GetInfo();
 			Console.WriteLine($"Connection to API is {(info.Success ? "OK" : "NOT OK! Something went wrong!")}");
 
-			TradeResult tradeResult = apiManager.Trade(TradeType.Buy, "LSK", 0.123m, "PLN", 1m);
-			long orderId = tradeResult.OrderId;
-			if(orderId != 0)
-			{
-				CancelResult cancelResult = apiManager.CancelOrder(orderId);
-			}
+			//TradeResult tradeResult = apiManager.Trade(TradeType.Buy, "LSK", 0.123m, "PLN", 1m);
+			//long orderId = tradeResult.OrderId;
+			//if(orderId != 0)
+			//{
+			//	CancelResult cancelResult = apiManager.CancelOrder(orderId);
+			//}
+
+			apiManager.GetOrderBook("LSK", "PLN");
 
 			Console.Read();
 		}
