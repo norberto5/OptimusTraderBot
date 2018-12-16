@@ -99,7 +99,7 @@ namespace OptimusTraderBot
 
 			if(orderbookResult.Bids != null && orderbookResult.Bids.Count > 0)
 			{
-				foreach(Order bid in orderbookResult.Bids.OrderBy(b => b.Rate).TakeLast(10))
+				foreach(OrderBookItem bid in orderbookResult.Bids.OrderBy(b => b.Rate).TakeLast(10))
 				{
 					Console.WriteLine($"Bid/Buy: {bid} {orderCurrency} (rate: {bid.Rate})");
 				}
@@ -107,7 +107,7 @@ namespace OptimusTraderBot
 			Console.WriteLine(new string('-', 30));
 			if(orderbookResult.Asks != null && orderbookResult.Asks.Count > 0)
 			{
-				foreach(Order ask in orderbookResult.Asks.OrderBy(a => a.Rate).Take(10))
+				foreach(OrderBookItem ask in orderbookResult.Asks.OrderBy(a => a.Rate).Take(10))
 				{
 					Console.WriteLine($"Ask/Sell: {ask} {orderCurrency} (rate: {ask.Rate})");
 				}

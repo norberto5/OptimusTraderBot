@@ -4,11 +4,11 @@ namespace OptimusTraderBot.Models
 {
 	public class OrderBookResult
 	{
-		public List<Order> Bids { get; set; }
-		public List<Order> Asks { get; set; }
+		public List<OrderBookItem> Bids { get; set; }
+		public List<OrderBookItem> Asks { get; set; }
 	}
 
-	public class Order
+	public class OrderBookItem
 	{
 		public string Currency { get; set; }
 		public decimal Price { get; set; }
