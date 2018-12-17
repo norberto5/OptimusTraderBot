@@ -138,7 +138,7 @@ namespace OptimusTraderBot
 					? $"{order.CurrentPrice}/{order.StartPrice} {order.PaymentCurrency}"
 					: $"{order.CurrentPrice} {order.PaymentCurrency}";
 
-				Console.WriteLine($"{order.Type} - {units} for {price} (rate: {order.CurrentPrice/order.Units}) ({order.OrderDate.ToString(dateCulture)})");
+				Console.WriteLine($"{order.Type} - {units} for {price} (rate: {order.CurrentPrice / order.Units}) ({order.OrderDate.ToString(dateCulture)})");
 			}
 
 			return orders;
