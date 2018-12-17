@@ -200,5 +200,27 @@ namespace OptimusTraderBot
 
 			return historyResult;
 		}
+
+		public List<Transaction> GetTransactions(string cryptoCurrency = null, string priceCurrency = null)
+		{
+			var parameters = new Dictionary<string, string>();
+			if(!string.IsNullOrEmpty(cryptoCurrency) && !string.IsNullOrEmpty(priceCurrency))
+			{
+				parameters.Add("market", $"{cryptoCurrency}-{priceCurrency}");
+			}
+
+			string result = apiConnector.CallApiOperation(ApiMethod.Transactions, parameters).Result;
+			var json = JToken.Parse(result);
+			//Console.WriteLine(json.ToString(Formatting.Indented));
+			List<Transaction> transactions = json.ToObject<List<Transaction>>();
+
+			foreach(Transaction transaction in transactions.Take(10).Reverse())
+			{
+				Console.WriteLine($"{transaction.Market} {transaction.Type}: {transaction.Amount} {transaction.CryptoCurrency} " +
+					$"for {transaction.Price} {transaction.PriceCurrency} (rate: {transaction.Rate}) ({transaction.Date.ToString(dateCulture)})");
+			}
+
+			return transactions;
+		}
 	}
 }
