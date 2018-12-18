@@ -16,7 +16,9 @@ namespace OptimusTraderBot
 				.AddJsonFile("appsettings.json", true, true)
 				.Build();
 			var apiSettings = new ApiSettings();
-			config.GetSection("ApiSettings").Bind(apiSettings);
+			config.GetSection(nameof(ApiSettings)).Bind(apiSettings);
+			var userSettings = new UserSettings();
+			config.GetSection(nameof(UserSettings)).Bind(userSettings);
 
 			var apiManager = new ApiManager(apiSettings);
 
