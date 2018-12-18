@@ -36,9 +36,9 @@ namespace OptimusTraderBot
 			{
 				{ "type", tradeType.ToString().ToLower() },
 				{ "currency", currency },
-				{ "amount", amount.ToString() },
+				{ "amount", amount.ToString("N8") },
 				{ "payment_currency", paymentCurrency },
-				{ "rate", rate.ToString() }
+				{ "rate", rate.ToString("N2") }
 			};
 
 			string result = apiConnector.CallApiOperation(ApiMethod.Trade, parameters).Result;
@@ -49,7 +49,7 @@ namespace OptimusTraderBot
 			if(tradeResult.Success)
 			{
 				//TODO: Upgrade message if Bought is not empty etc.
-				Console.WriteLine($"Successfully placed a trade of type {tradeType} of {amount} {currency} for {tradeResult.Price} {paymentCurrency} (rate: {tradeResult.Rate})");
+				Console.WriteLine($"Successfully placed a trade of type {tradeType} of {amount.ToString("N8")} {currency} for {tradeResult.Price.ToString("N2")} {paymentCurrency} (rate: {tradeResult.Rate.ToString("N2")})");
 				if(tradeResult.OrderId != 0)
 				{
 					Console.WriteLine($"Order id: {tradeResult.OrderId}");
@@ -57,7 +57,7 @@ namespace OptimusTraderBot
 			}
 			else
 			{
-				Console.WriteLine($"Failed to place a trade of type {tradeType} of {amount} {currency}");
+				Console.WriteLine($"Failed to place a trade of type {tradeType} of {amount.ToString("N8")} {currency}");
 			}
 
 			return tradeResult;
@@ -101,7 +101,7 @@ namespace OptimusTraderBot
 
 			if(orderbookResult.Bids != null && orderbookResult.Bids.Count > 0)
 			{
-				foreach(OrderBookItem bid in orderbookResult.Bids.OrderBy(b => b.Rate).TakeLast(10))
+				foreach(OrderBookItem bid in orderbookResult.Bids.OrderBy(b => b.Rate).TakeLast(3))
 				{
 					Console.WriteLine($"Bid/Buy: {bid} {orderCurrency} (rate: {bid.Rate})");
 				}
@@ -109,7 +109,7 @@ namespace OptimusTraderBot
 			Console.WriteLine(new string('-', 30));
 			if(orderbookResult.Asks != null && orderbookResult.Asks.Count > 0)
 			{
-				foreach(OrderBookItem ask in orderbookResult.Asks.OrderBy(a => a.Rate).Take(10))
+				foreach(OrderBookItem ask in orderbookResult.Asks.OrderBy(a => a.Rate).Take(3))
 				{
 					Console.WriteLine($"Ask/Sell: {ask} {orderCurrency} (rate: {ask.Rate})");
 				}
@@ -149,7 +149,7 @@ namespace OptimusTraderBot
 			var parameters = new Dictionary<string, string>()
 			{
 				{ "currency", currency },
-				{ "quantity", quantity.ToString() },
+				{ "quantity", quantity.ToString("N8") },
 				{ "address", address },
 			};
 
@@ -166,7 +166,7 @@ namespace OptimusTraderBot
 			var parameters = new Dictionary<string, string>()
 			{
 				{ "currency", currency },
-				{ "quantity", quantity.ToString() },
+				{ "quantity", quantity.ToString("N8") },
 				{ "account", accountNumber.ToString() },
 				{ "express", express.ToString().ToLower() },
 				{ "bic", swiftBicNumber },
