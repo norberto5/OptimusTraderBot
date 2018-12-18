@@ -32,13 +32,15 @@ namespace OptimusTraderBot
 			//	CancelResult cancelResult = apiManager.CancelOrder(orderId);
 			//}
 
+			Console.WriteLine("Actual orders:");
 			apiManager.GetOrders();
 			Console.WriteLine(new string('-', 30));
+			Console.WriteLine("Actual OrderBook for LSK/PLN:");
 			apiManager.GetOrderBook("LSK", "PLN");
 			Console.WriteLine(new string('-', 30));
-			apiManager.GetTransactions();
+			//apiManager.GetTransactions();
 
-			var consoleController = new ConsoleController(apiManager);
+			var consoleController = new ConsoleController(apiManager, userSettings);
 			string cmd = string.Empty;
 			while(cmd != "exit")
 			{
