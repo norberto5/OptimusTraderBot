@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using Microsoft.Extensions.Configuration;
-using OptimusTraderBot.Enums;
 using OptimusTraderBot.Models;
 using OptimusTraderBot.Settings;
 
@@ -31,9 +30,19 @@ namespace OptimusTraderBot
 			//	CancelResult cancelResult = apiManager.CancelOrder(orderId);
 			//}
 
-			//apiManager.GetOrderBook("LSK", "PLN");
-
 			apiManager.GetOrders();
+			Console.WriteLine(new string('-', 30));
+			apiManager.GetOrderBook("LSK", "PLN");
+			Console.WriteLine(new string('-', 30));
+			apiManager.GetTransactions();
+
+			var consoleController = new ConsoleController(apiManager);
+			string cmd = string.Empty;
+			while(cmd != "exit")
+			{
+				cmd = Console.ReadLine();
+				consoleController.ParseCommand(cmd);
+			}
 
 			Console.Read();
 		}
