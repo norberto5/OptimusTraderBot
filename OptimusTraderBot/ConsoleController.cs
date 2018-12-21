@@ -128,7 +128,7 @@ namespace OptimusTraderBot
 			List<Order> orders = apiManager.GetOrders();
 			if(parameters.Length == 1)
 			{
-				orderIdToCancel = orders.FirstOrDefault()?.OrderId;
+				orderIdToCancel = orders.LastOrDefault()?.OrderId;
 				if(orderIdToCancel == null)
 				{
 					Console.WriteLine("No order to cancel");
