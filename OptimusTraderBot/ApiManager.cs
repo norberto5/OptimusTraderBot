@@ -71,7 +71,7 @@ namespace OptimusTraderBot
 
 			string result = apiConnector.CallApiOperation(ApiMethod.Cancel, parameters).Result;
 			var json = JToken.Parse(result);
-			Console.WriteLine(json.ToString(Formatting.Indented));
+			//Console.WriteLine(json.ToString(Formatting.Indented));
 			CancelResult cancelResult = json.ToObject<CancelResult>();
 
 			if(cancelResult.Success)

@@ -31,6 +31,9 @@ namespace OptimusTraderBot
 				case "trade":
 					TradeCommand(parameters);
 					break;
+				case "cancel":
+					CancelCommand(parameters);
+					break;
 			}
 		}
 
@@ -116,6 +119,49 @@ namespace OptimusTraderBot
 			}
 
 			apiManager.Trade(tradeType, currency, amount, userSettings.PaymentCurrency, rate);
+		}
+
+		private void CancelCommand(string[] parameters)
+		{
+			long? orderIdToCancel = null;
+
+			List<Order> orders = apiManager.GetOrders();
+			if(parameters.Length == 1)
+			{
+				orderIdToCancel = orders.FirstOrDefault()?.OrderId;
+				if(orderIdToCancel == null)
+				{
+					Console.WriteLine("No order to cancel");
+				}
+			}
+			else if(parameters.Length == 2)
+			{
+				if(long.TryParse(parameters[1], out long parsedOrderId))
+				{
+					IEnumerable<Order> matchingOrders = orders.Where(o => o.OrderId.ToString().Contains(parameters[1]));
+					if(matchingOrders.Count() == 1)
+					{
+						orderIdToCancel = matchingOrders.First().OrderId;
+					}
+					else if(matchingOrders.Count() > 1)
+					{
+						Console.WriteLine("More matching orders:");
+						foreach(Order order in matchingOrders)
+						{
+							Console.WriteLine(order);
+						}
+					}
+					else
+					{
+						Console.WriteLine("No orders match the order id pattern");
+					}
+				}
+			}
+
+			if(orderIdToCancel != null)
+			{
+				apiManager.CancelOrder(orderIdToCancel.Value);
+			}
 		}
 	}
 }
