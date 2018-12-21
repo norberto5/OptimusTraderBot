@@ -37,6 +37,9 @@ namespace OptimusTraderBot
 				case "orderbook":
 					OrderbookCommand(parameters);
 					break;
+				case "orders":
+					OrdersCommand(parameters);
+					break;
 			}
 		}
 
@@ -177,6 +180,14 @@ namespace OptimusTraderBot
 
 			OrderBookResult result =apiManager.GetOrderBook(parameters[1].ToUpper(), userSettings.PaymentCurrency);
 			Console.WriteLine(result.GetString());
+		}
+
+		private void OrdersCommand(string[] parameters)
+		{
+			Console.WriteLine("Actual orders:");
+			List<Order> orders = apiManager.GetOrders();
+			foreach(Order order in orders)
+				Console.WriteLine(order);
 		}
 	}
 }
