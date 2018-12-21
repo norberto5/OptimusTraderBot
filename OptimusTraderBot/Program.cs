@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using OptimusTraderBot.Models;
@@ -35,10 +36,15 @@ namespace OptimusTraderBot
 			//}
 
 			Console.WriteLine("Actual orders:");
-			apiManager.GetOrders();
+			List<Order> orders = apiManager.GetOrders();
+			foreach(Order order in orders)
+				Console.WriteLine(order);
+
 			Console.WriteLine(new string('-', 30));
+
 			Console.WriteLine("Actual OrderBook for LSK/PLN:");
 			apiManager.GetOrderBook("LSK", "PLN");
+
 			Console.WriteLine(new string('-', 30));
 			//apiManager.GetTransactions();
 
