@@ -33,7 +33,7 @@ namespace OptimusTraderBot.Models
 				? $"{CurrentPrice}/{StartPrice} {PaymentCurrency}"
 				: $"{CurrentPrice} {PaymentCurrency}";
 
-			return $"{Type} - {units} for {price} (rate: {CurrentPrice / Units}) ({OrderDate.ToString(Program.DateCulture)})";
+			return $"{Type} - {units} for {price} (rate: {CurrentPrice / Units}) ({OrderDate.ToString(Program.DateCulture)}) ({OrderId})";
 		}
 	}
 }
