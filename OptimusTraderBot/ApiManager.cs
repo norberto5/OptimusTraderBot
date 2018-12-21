@@ -13,7 +13,6 @@ namespace OptimusTraderBot
 {
 	public class ApiManager
 	{
-		private static readonly CultureInfo dateCulture = CultureInfo.GetCultureInfo("PL");
 		private readonly IApiConnector apiConnector;
 
 		public ApiManager(ApiSettings apiSettings)
@@ -129,18 +128,6 @@ namespace OptimusTraderBot
 			//Console.WriteLine(json.ToString(Formatting.Indented));
 			List<Order> orders = json.ToObject<List<Order>>();
 
-			foreach(Order order in orders)
-			{
-				string units = order.Units != order.StartUnits
-					? $"{order.Units}/{order.StartUnits} {order.OrderCurrency}"
-					: $"{order.Units} {order.OrderCurrency}";
-				string price = order.CurrentPrice != order.StartPrice
-					? $"{order.CurrentPrice}/{order.StartPrice} {order.PaymentCurrency}"
-					: $"{order.CurrentPrice} {order.PaymentCurrency}";
-
-				Console.WriteLine($"{order.Type} - {units} for {price} (rate: {order.CurrentPrice / order.Units}) ({order.OrderDate.ToString(dateCulture)})");
-			}
-
 			return orders;
 		}
 
@@ -195,7 +182,7 @@ namespace OptimusTraderBot
 
 			foreach(HistoryEntry entry in historyResult)
 			{
-				Console.WriteLine($"{entry.OperationType} : (amount: {entry.Amount } {entry.Currency}) (balance after: {entry.BalanceAfter} {entry.Currency}) ({entry.Time.ToString(dateCulture)})");
+				Console.WriteLine($"{entry.OperationType} : (amount: {entry.Amount } {entry.Currency}) (balance after: {entry.BalanceAfter} {entry.Currency}) ({entry.Time.ToString(Program.DateCulture)})");
 			}
 
 			return historyResult;
@@ -217,7 +204,7 @@ namespace OptimusTraderBot
 			foreach(Transaction transaction in transactions.Take(10).Reverse())
 			{
 				Console.WriteLine($"{transaction.Market} {transaction.Type}: {transaction.Amount} {transaction.CryptoCurrency} " +
-					$"for {transaction.Price} {transaction.PriceCurrency} (rate: {transaction.Rate}) ({transaction.Date.ToString(dateCulture)})");
+					$"for {transaction.Price} {transaction.PriceCurrency} (rate: {transaction.Rate}) ({transaction.Date.ToString(Program.DateCulture)})");
 			}
 
 			return transactions;

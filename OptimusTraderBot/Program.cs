@@ -8,6 +8,8 @@ namespace OptimusTraderBot
 {
 	internal class Program
 	{
+		public static readonly CultureInfo DateCulture = CultureInfo.GetCultureInfo("PL");
+
 		private static void Main(string[] args)
 		{
 			CultureInfo.CurrentCulture = CultureInfo.InvariantCulture;
