@@ -43,7 +43,8 @@ namespace OptimusTraderBot
 			Console.WriteLine(new string('-', 30));
 
 			Console.WriteLine("Actual OrderBook for LSK/PLN:");
-			apiManager.GetOrderBook("LSK", "PLN");
+			OrderBookResult orderbookResult =apiManager.GetOrderBook("LSK", "PLN");
+			Console.WriteLine(orderbookResult.GetString(3, 3));
 
 			Console.WriteLine(new string('-', 30));
 			//apiManager.GetTransactions();

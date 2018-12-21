@@ -97,22 +97,8 @@ namespace OptimusTraderBot
 			var json = JToken.Parse(result);
 			//Console.WriteLine(json.ToString(Formatting.Indented));
 			OrderBookResult orderbookResult = json.ToObject<OrderBookResult>();
+			orderbookResult.Currency = orderCurrency;
 
-			if(orderbookResult.Bids != null && orderbookResult.Bids.Count > 0)
-			{
-				foreach(OrderBookItem bid in orderbookResult.Bids.OrderBy(b => b.Rate).TakeLast(3))
-				{
-					Console.WriteLine($"Bid/Buy: {bid} {orderCurrency} (rate: {bid.Rate})");
-				}
-			}
-			Console.WriteLine(new string('-', 30));
-			if(orderbookResult.Asks != null && orderbookResult.Asks.Count > 0)
-			{
-				foreach(OrderBookItem ask in orderbookResult.Asks.OrderBy(a => a.Rate).Take(3))
-				{
-					Console.WriteLine($"Ask/Sell: {ask} {orderCurrency} (rate: {ask.Rate})");
-				}
-			}
 			return orderbookResult;
 		}
 
