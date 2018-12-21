@@ -86,7 +86,7 @@ namespace OptimusTraderBot
 				Console.WriteLine($"Wrong currency symbol! Use good currency symbol (i.e. LSK)!");
 				return;
 			}
-			string currency = parameters[3];
+			string currency = parameters[3].ToUpper();
 
 			decimal amount = 0;
 			if(parameters.Length == 5)
