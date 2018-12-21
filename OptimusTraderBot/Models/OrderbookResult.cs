@@ -17,7 +17,7 @@ namespace OptimusTraderBot.Models
 
 			if(Bids != null && Bids.Count > 0)
 			{
-				foreach(OrderBookItem bid in Bids.OrderBy(b => b.Rate).TakeLast(3))
+				foreach(OrderBookItem bid in Bids.OrderBy(b => b.Rate).TakeLast(bids))
 				{
 					sb.AppendLine($"Bid/Buy: {bid} {Currency} (rate: {bid.Rate})");
 				}
@@ -25,7 +25,7 @@ namespace OptimusTraderBot.Models
 			sb.AppendLine(new string('-', 30));
 			if(Asks != null && Asks.Count > 0)
 			{
-				foreach(OrderBookItem ask in Asks.OrderBy(a => a.Rate).Take(3))
+				foreach(OrderBookItem ask in Asks.OrderBy(a => a.Rate).Take(asks))
 				{
 					sb.AppendLine($"Ask/Sell: {ask} {Currency} (rate: {ask.Rate})");
 				}
