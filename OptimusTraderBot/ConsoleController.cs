@@ -34,6 +34,9 @@ namespace OptimusTraderBot
 				case "cancel":
 					CancelCommand(parameters);
 					break;
+				case "orderbook":
+					OrderbookCommand(parameters);
+					break;
 			}
 		}
 
@@ -162,6 +165,18 @@ namespace OptimusTraderBot
 			{
 				apiManager.CancelOrder(orderIdToCancel.Value);
 			}
+		}
+
+		private void OrderbookCommand(string[] parameters)
+		{
+			if(parameters.Length != 2)
+			{
+				Console.WriteLine("Wrong number of parameters! Use: orderbook [currency]");
+				return;
+			}
+
+			OrderBookResult result =apiManager.GetOrderBook(parameters[1].ToUpper(), userSettings.PaymentCurrency);
+			Console.WriteLine(result.GetString());
 		}
 	}
 }
