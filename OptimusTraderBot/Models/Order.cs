@@ -30,8 +30,8 @@ namespace OptimusTraderBot.Models
 					? $"{Units}/{StartUnits} {OrderCurrency}"
 					: $"{Units} {OrderCurrency}";
 			string price = CurrentPrice != StartPrice
-				? $"{CurrentPrice}/{StartPrice} {PaymentCurrency}"
-				: $"{CurrentPrice} {PaymentCurrency}";
+				? $"{CurrentPrice.ToString("N2")}/{StartPrice.ToString("N2")} {PaymentCurrency}"
+				: $"{CurrentPrice.ToString("N2")} {PaymentCurrency}";
 
 			return $"{Type} - {units} for {price} (rate: {CurrentPrice / Units}) ({OrderDate.ToString(Program.DateCulture)}) ({OrderId})";
 		}

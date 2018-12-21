@@ -42,6 +42,6 @@ namespace OptimusTraderBot.Models
 
 		public decimal Rate => Price / Quantity;
 
-		public override string ToString() => $"{Price} {Currency} for {Quantity}";
+		public override string ToString() => $"{Price.ToString("N2")} {Currency} for {Quantity}";
 	}
 }
