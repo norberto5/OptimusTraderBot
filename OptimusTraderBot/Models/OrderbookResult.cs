@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OptimusTraderBot.Enums;
 
 namespace OptimusTraderBot.Models
 {
@@ -11,7 +12,11 @@ namespace OptimusTraderBot.Models
 		public List<OrderBookItem> Bids { get; set; }
 		public List<OrderBookItem> Asks { get; set; }
 
-		public string GetString(int bids = 3, int asks = 3)
+		public string GetString(int bids = 3, int asks = 3) => MakeString(bids, asks);
+
+		public string GetStringWithMarkedOrders(IEnumerable<Order> orders, int bids = 3, int asks = 3) => MakeString(bids, asks, orders);
+
+		private string MakeString(int bids = 3, int asks = 3, IEnumerable<Order> orders = null)
 		{
 			var sb = new StringBuilder();
 
@@ -19,7 +24,16 @@ namespace OptimusTraderBot.Models
 			{
 				foreach(OrderBookItem bid in Bids.OrderBy(b => b.Rate).TakeLast(bids))
 				{
-					sb.AppendLine($"Bid/Buy: {bid} {Currency} (rate: {bid.Rate})");
+					string line = $"Bid/Buy: {bid} {Currency} (rate: {bid.Rate})";
+					if(orders != null)
+					{
+						Order myOrder = orders.FirstOrDefault(o => o.Type == TradeType.Bid && o.OrderCurrency == Currency && o.Rate == bid.Rate);
+						if(myOrder != null)
+						{
+							line = line + $"    <----- {myOrder.CurrentPrice.ToString("N2")} {myOrder.PaymentCurrency} for {myOrder.Units} {myOrder.OrderCurrency} ({myOrder.OrderId})";
+						}
+					}
+					sb.AppendLine(line);
 				}
 			}
 			sb.AppendLine(new string('-', 30));
@@ -27,7 +41,16 @@ namespace OptimusTraderBot.Models
 			{
 				foreach(OrderBookItem ask in Asks.OrderBy(a => a.Rate).Take(asks))
 				{
-					sb.AppendLine($"Ask/Sell: {ask} {Currency} (rate: {ask.Rate})");
+					string line = $"Ask/Sell: {ask} {Currency} (rate: {ask.Rate})";
+					if(orders != null)
+					{
+						Order myOrder = orders.FirstOrDefault(o => o.Type == TradeType.Ask && o.OrderCurrency == Currency && o.Rate == ask.Rate);
+						if(myOrder != null)
+						{
+							line = line + $"    <----- {myOrder.CurrentPrice.ToString("N2")} {myOrder.PaymentCurrency} for {myOrder.Units} {myOrder.OrderCurrency} ({myOrder.OrderId})";
+						}
+					}
+					sb.AppendLine(line);
 				}
 			}
 			return sb.Remove(sb.Length - 2, 2).ToString();

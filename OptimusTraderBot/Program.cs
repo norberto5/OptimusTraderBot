@@ -80,7 +80,7 @@ namespace OptimusTraderBot
 
 			Console.WriteLine("Actual OrderBook for LSK/PLN:");
 			OrderBookResult orderbookResult = apiManager.GetOrderBook("LSK", "PLN");
-			Console.WriteLine(orderbookResult.GetString(3, 3));
+			Console.WriteLine(orderbookResult.GetStringWithMarkedOrders(orders, 5, 5));
 
 			Console.WriteLine(new string('-', 30));
 		}
@@ -108,7 +108,7 @@ namespace OptimusTraderBot
 
 				sb.AppendLine("Actual OrderBook for LSK/PLN:");
 				OrderBookResult orderbookResult = apiManager.GetOrderBook("LSK", "PLN");
-				sb.AppendLine(orderbookResult.GetString(5, 5));
+				sb.AppendLine(orderbookResult.GetStringWithMarkedOrders(newOrders, 5, 5));
 
 				Console.Clear();
 				Console.WriteLine(sb);
