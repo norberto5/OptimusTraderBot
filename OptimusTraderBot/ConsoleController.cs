@@ -43,6 +43,9 @@ namespace OptimusTraderBot
 				case "history":
 					HistoryCommand(parameters);
 					break;
+				case "transactions":
+					TransactionsCommand(parameters);
+					break;
 			}
 		}
 
@@ -206,6 +209,24 @@ namespace OptimusTraderBot
 			foreach(HistoryEntry entry in history)
 			{
 				Console.WriteLine(entry);
+			}
+		}
+
+		private void TransactionsCommand(string[] parameters)
+		{
+			string cryptoCurrency = null;
+			string priceCurrency = null;
+			if(parameters.Length == 3)
+			{
+				cryptoCurrency = parameters[1];
+				priceCurrency = parameters[2];
+			}
+
+			List<Transaction> transactions = apiManager.GetTransactions(cryptoCurrency, priceCurrency);
+
+			foreach(Transaction transaction in transactions.Take(10).Reverse())
+			{
+				Console.WriteLine(transaction);
 			}
 		}
 	}
