@@ -182,12 +182,6 @@ namespace OptimusTraderBot
 			//Console.WriteLine(json.ToString(Formatting.Indented));
 			List<Transaction> transactions = json.ToObject<List<Transaction>>();
 
-			foreach(Transaction transaction in transactions.Take(10).Reverse())
-			{
-				Console.WriteLine($"{transaction.Market} {transaction.Type}: {transaction.Amount} {transaction.CryptoCurrency} " +
-					$"for {transaction.Price} {transaction.PriceCurrency} (rate: {transaction.Rate}) ({transaction.Date.ToString(Program.DateCulture)})");
-			}
-
 			return transactions;
 		}
 	}

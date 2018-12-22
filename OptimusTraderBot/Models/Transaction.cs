@@ -14,5 +14,7 @@ namespace OptimusTraderBot.Models
 
 		public string CryptoCurrency => Market.Substring(0, 3);
 		public string PriceCurrency => Market.Substring(4, 3);
+
+		public override string ToString() => $"{Market} {Type}: {Amount} {CryptoCurrency} for {Price.ToString("N2")} {PriceCurrency} (rate: {Rate}) ({Date.ToString(Program.DateCulture)})";
 	}
 }
