@@ -184,7 +184,7 @@ namespace OptimusTraderBot
 				return;
 			}
 
-			OrderBookResult result =apiManager.GetOrderBook(parameters[1].ToUpper(), userSettings.PaymentCurrency);
+			OrderBookResult result = apiManager.GetOrderBook(parameters[1].ToUpper(), userSettings.PaymentCurrency);
 			Console.WriteLine(result.GetString());
 		}
 

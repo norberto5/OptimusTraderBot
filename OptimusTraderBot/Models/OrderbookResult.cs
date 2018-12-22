@@ -30,7 +30,7 @@ namespace OptimusTraderBot.Models
 					sb.AppendLine($"Ask/Sell: {ask} {Currency} (rate: {ask.Rate})");
 				}
 			}
-			return sb.Remove(sb.Length-2, 2).ToString();
+			return sb.Remove(sb.Length - 2, 2).ToString();
 		}
 	}
 
