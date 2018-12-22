@@ -21,29 +21,36 @@ namespace OptimusTraderBot
 		public void ParseCommand(string cmdToParse)
 		{
 			string[] parameters = cmdToParse.Split(' ');
-			string cmd = parameters[0];
+			string cmd = parameters[0].ToLower();
 
 			switch(cmd)
 			{
 				case "info":
+				case "i":
 					InfoCommand();
 					break;
 				case "trade":
+				case "t":
 					TradeCommand(parameters);
 					break;
 				case "cancel":
+				case "c":
 					CancelCommand(parameters);
 					break;
 				case "orderbook":
+				case "ob":
 					OrderbookCommand(parameters);
 					break;
 				case "orders":
+				case "o":
 					OrdersCommand(parameters);
 					break;
 				case "history":
+				case "h":
 					HistoryCommand(parameters);
 					break;
 				case "transactions":
+				case "tr":
 					TransactionsCommand(parameters);
 					break;
 			}
