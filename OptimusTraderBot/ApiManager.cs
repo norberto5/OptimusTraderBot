@@ -13,7 +13,6 @@ namespace OptimusTraderBot
 {
 	public class ApiManager
 	{
-		private static readonly CultureInfo dateCulture = CultureInfo.GetCultureInfo("PL");
 		private readonly IApiConnector apiConnector;
 
 		public ApiManager(ApiSettings apiSettings)
@@ -36,9 +35,9 @@ namespace OptimusTraderBot
 			{
 				{ "type", tradeType.ToString().ToLower() },
 				{ "currency", currency },
-				{ "amount", amount.ToString() },
+				{ "amount", amount.ToString("N8") },
 				{ "payment_currency", paymentCurrency },
-				{ "rate", rate.ToString() }
+				{ "rate", rate.ToString("N2") }
 			};
 
 			string result = apiConnector.CallApiOperation(ApiMethod.Trade, parameters).Result;
@@ -49,7 +48,7 @@ namespace OptimusTraderBot
 			if(tradeResult.Success)
 			{
 				//TODO: Upgrade message if Bought is not empty etc.
-				Console.WriteLine($"Successfully placed a trade of type {tradeType} of {amount} {currency} for {tradeResult.Price} {paymentCurrency} (rate: {tradeResult.Rate})");
+				Console.WriteLine($"Successfully placed a trade of type {tradeType} of {amount.ToString("N8")} {currency} for {tradeResult.Price.ToString("N2")} {paymentCurrency} (rate: {tradeResult.Rate.ToString("N2")})");
 				if(tradeResult.OrderId != 0)
 				{
 					Console.WriteLine($"Order id: {tradeResult.OrderId}");
@@ -57,7 +56,7 @@ namespace OptimusTraderBot
 			}
 			else
 			{
-				Console.WriteLine($"Failed to place a trade of type {tradeType} of {amount} {currency}");
+				Console.WriteLine($"Failed to place a trade of type {tradeType} of {amount.ToString("N8")} {currency}");
 			}
 
 			return tradeResult;
@@ -72,7 +71,7 @@ namespace OptimusTraderBot
 
 			string result = apiConnector.CallApiOperation(ApiMethod.Cancel, parameters).Result;
 			var json = JToken.Parse(result);
-			Console.WriteLine(json.ToString(Formatting.Indented));
+			//Console.WriteLine(json.ToString(Formatting.Indented));
 			CancelResult cancelResult = json.ToObject<CancelResult>();
 
 			if(cancelResult.Success)
@@ -98,22 +97,8 @@ namespace OptimusTraderBot
 			var json = JToken.Parse(result);
 			//Console.WriteLine(json.ToString(Formatting.Indented));
 			OrderBookResult orderbookResult = json.ToObject<OrderBookResult>();
+			orderbookResult.Currency = orderCurrency;
 
-			if(orderbookResult.Bids != null && orderbookResult.Bids.Count > 0)
-			{
-				foreach(OrderBookItem bid in orderbookResult.Bids.OrderBy(b => b.Rate).TakeLast(10))
-				{
-					Console.WriteLine($"Bid/Buy: {bid} {orderCurrency} (rate: {bid.Rate})");
-				}
-			}
-			Console.WriteLine(new string('-', 30));
-			if(orderbookResult.Asks != null && orderbookResult.Asks.Count > 0)
-			{
-				foreach(OrderBookItem ask in orderbookResult.Asks.OrderBy(a => a.Rate).Take(10))
-				{
-					Console.WriteLine($"Ask/Sell: {ask} {orderCurrency} (rate: {ask.Rate})");
-				}
-			}
 			return orderbookResult;
 		}
 
@@ -129,18 +114,6 @@ namespace OptimusTraderBot
 			//Console.WriteLine(json.ToString(Formatting.Indented));
 			List<Order> orders = json.ToObject<List<Order>>();
 
-			foreach(Order order in orders)
-			{
-				string units = order.Units != order.StartUnits
-					? $"{order.Units}/{order.StartUnits} {order.OrderCurrency}"
-					: $"{order.Units} {order.OrderCurrency}";
-				string price = order.CurrentPrice != order.StartPrice
-					? $"{order.CurrentPrice}/{order.StartPrice} {order.PaymentCurrency}"
-					: $"{order.CurrentPrice} {order.PaymentCurrency}";
-
-				Console.WriteLine($"{order.Type} - {units} for {price} (rate: {order.CurrentPrice / order.Units}) ({order.OrderDate.ToString(dateCulture)})");
-			}
-
 			return orders;
 		}
 
@@ -149,7 +122,7 @@ namespace OptimusTraderBot
 			var parameters = new Dictionary<string, string>()
 			{
 				{ "currency", currency },
-				{ "quantity", quantity.ToString() },
+				{ "quantity", quantity.ToString("N8") },
 				{ "address", address },
 			};
 
@@ -166,7 +139,7 @@ namespace OptimusTraderBot
 			var parameters = new Dictionary<string, string>()
 			{
 				{ "currency", currency },
-				{ "quantity", quantity.ToString() },
+				{ "quantity", quantity.ToString("N8") },
 				{ "account", accountNumber.ToString() },
 				{ "express", express.ToString().ToLower() },
 				{ "bic", swiftBicNumber },
@@ -190,13 +163,8 @@ namespace OptimusTraderBot
 
 			string result = apiConnector.CallApiOperation(ApiMethod.History, parameters).Result;
 			var json = JToken.Parse(result);
-			Console.WriteLine(json.ToString(Formatting.Indented));
+			//Console.WriteLine(json.ToString(Formatting.Indented));
 			List<HistoryEntry> historyResult = json.ToObject<List<HistoryEntry>>();
-
-			foreach(HistoryEntry entry in historyResult)
-			{
-				Console.WriteLine($"{entry.OperationType} : (amount: {entry.Amount } {entry.Currency}) (balance after: {entry.BalanceAfter} {entry.Currency}) ({entry.Time.ToString(dateCulture)})");
-			}
 
 			return historyResult;
 		}
@@ -213,12 +181,6 @@ namespace OptimusTraderBot
 			var json = JToken.Parse(result);
 			//Console.WriteLine(json.ToString(Formatting.Indented));
 			List<Transaction> transactions = json.ToObject<List<Transaction>>();
-
-			foreach(Transaction transaction in transactions.Take(10).Reverse())
-			{
-				Console.WriteLine($"{transaction.Market} {transaction.Type}: {transaction.Amount} {transaction.CryptoCurrency} " +
-					$"for {transaction.Price} {transaction.PriceCurrency} (rate: {transaction.Rate}) ({transaction.Date.ToString(dateCulture)})");
-			}
 
 			return transactions;
 		}

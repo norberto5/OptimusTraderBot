@@ -2,8 +2,8 @@
 {
 	public class Money
 	{
-		public double Available { get; set; }
-		public double Locked { get; set; }
+		public decimal Available { get; set; }
+		public decimal Locked { get; set; }
 
 		public override string ToString() => $"Available: {Available} - Locked: {Locked}";
 	}

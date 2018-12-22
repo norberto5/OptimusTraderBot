@@ -8,5 +8,8 @@ appsettings.json configuration:
     "PublicApiKey": "public_api_key",
     "PrivateApiKey": "private_api_key"
   }
+  "UserSettings": {
+    "PaymentCurrency": "PLN"
+  }
 }
 ```

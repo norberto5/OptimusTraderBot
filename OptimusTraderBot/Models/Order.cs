@@ -23,5 +23,17 @@ namespace OptimusTraderBot.Models
 		public decimal CurrentPrice { get; set; }
 		[JsonProperty("start_price")]
 		public decimal StartPrice { get; set; }
+
+		public override string ToString()
+		{
+			string units = Units != StartUnits
+					? $"{Units}/{StartUnits} {OrderCurrency}"
+					: $"{Units} {OrderCurrency}";
+			string price = CurrentPrice != StartPrice
+				? $"{CurrentPrice.ToString("N2")}/{StartPrice.ToString("N2")} {PaymentCurrency}"
+				: $"{CurrentPrice.ToString("N2")} {PaymentCurrency}";
+
+			return $"{Type} - {units} for {price} (rate: {CurrentPrice / Units}) ({OrderDate.ToString(Program.DateCulture)}) ({OrderId})";
+		}
 	}
 }

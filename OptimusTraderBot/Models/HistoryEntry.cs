@@ -14,5 +14,7 @@ namespace OptimusTraderBot.Models
 		public string OperationType { get; set; }
 		public DateTime Time { get; set; }
 		public string Comment { get; set; }
+
+		public override string ToString() => $"{OperationType} : (amount: {Amount} {Currency}) (balance after: {BalanceAfter} {Currency}) ({Time.ToString(Program.DateCulture)})";
 	}
 }
