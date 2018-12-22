@@ -163,13 +163,8 @@ namespace OptimusTraderBot
 
 			string result = apiConnector.CallApiOperation(ApiMethod.History, parameters).Result;
 			var json = JToken.Parse(result);
-			Console.WriteLine(json.ToString(Formatting.Indented));
+			//Console.WriteLine(json.ToString(Formatting.Indented));
 			List<HistoryEntry> historyResult = json.ToObject<List<HistoryEntry>>();
-
-			foreach(HistoryEntry entry in historyResult)
-			{
-				Console.WriteLine(entry);
-			}
 
 			return historyResult;
 		}

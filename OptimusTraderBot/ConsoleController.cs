@@ -40,6 +40,9 @@ namespace OptimusTraderBot
 				case "orders":
 					OrdersCommand(parameters);
 					break;
+				case "history":
+					HistoryCommand(parameters);
+					break;
 			}
 		}
 
@@ -188,6 +191,22 @@ namespace OptimusTraderBot
 			List<Order> orders = apiManager.GetOrders();
 			foreach(Order order in orders)
 				Console.WriteLine(order);
+		}
+
+		private void HistoryCommand(string[] parameters)
+		{
+			if(parameters.Length != 2)
+			{
+				Console.WriteLine("Wrong number of parameters! Use: history [currency]");
+				return;
+			}
+
+			List<HistoryEntry> history = apiManager.GetHistory(parameters[1].ToUpper(), 10);
+
+			foreach(HistoryEntry entry in history)
+			{
+				Console.WriteLine(entry);
+			}
 		}
 	}
 }
