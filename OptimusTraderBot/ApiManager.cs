@@ -168,7 +168,7 @@ namespace OptimusTraderBot
 
 			foreach(HistoryEntry entry in historyResult)
 			{
-				Console.WriteLine($"{entry.OperationType} : (amount: {entry.Amount } {entry.Currency}) (balance after: {entry.BalanceAfter} {entry.Currency}) ({entry.Time.ToString(Program.DateCulture)})");
+				Console.WriteLine(entry);
 			}
 
 			return historyResult;
