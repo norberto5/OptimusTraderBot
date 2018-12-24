@@ -98,7 +98,6 @@ namespace OptimusTraderBot
 				}
 
 				var sb = new StringBuilder();
-				sb.AppendLine($"------- AUTO UPDATE ------- ({DateTime.Now.ToString(DateCulture)})");
 				sb.AppendLine("Actual orders:");
 				List<Order> newOrders = apiManager.GetOrders();
 				foreach(Order order in newOrders)
@@ -116,15 +115,23 @@ namespace OptimusTraderBot
 				if(orders.Count != newOrders.Count)
 				{
 					orders = newOrders;
-					Console.Beep(500, 500);
-					Console.Beep(500, 500);
-					Console.Beep(500, 500);
 					Console.WriteLine("Orders changed!");
+					Console.Beep(500, 500);
+					Console.Beep(500, 500);
+					Console.Beep(500, 500);
 					break;
 				}
 
-				for(int i = 0; i < 100; i++)
+				for(int i = 0; i < 104; i++)
 				{
+					if(i % 5 == 0)
+					{
+						Console.Clear();
+						Console.WriteLine($"{new string('-', Math.Min(i / 5, 10))}{new string('.', Math.Max(0, Math.Min(10 - i / 5, 10)))}" +
+							$"AUTOUPDATE" +
+							$"{(i < 50 ? new string('.', 10) : new string('-', Math.Min((i-50) / 5, 10)) + new string('.', Math.Min(10 - (i - 50) / 5, 10)))}");
+						Console.WriteLine(sb);
+					}
 					if(worker.CancellationPending)
 					{
 						e.Cancel = true;
