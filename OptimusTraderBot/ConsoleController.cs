@@ -62,20 +62,7 @@ namespace OptimusTraderBot
 			Console.WriteLine(new string('-', 30));
 			if(info.Success)
 			{
-				IEnumerable<KeyValuePair<string, Money>> balancesNotZero = info.Balances.Where(b => b.Value.Available != 0 || b.Value.Locked != 0);
-				if(balancesNotZero.Count() == 0)
-				{
-					Console.WriteLine("Your balances are empty!");
-				}
-				else
-				{
-					foreach(KeyValuePair<string, Money> balance in balancesNotZero)
-					{
-						Console.WriteLine($"{balance.Key} : {balance.Value}");
-					}
-				}
-				Console.WriteLine(new string('-', 30));
-				Console.WriteLine($"Fee: {info.Fee}");
+				Console.WriteLine(info);
 			}
 			else
 			{
