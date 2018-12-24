@@ -40,7 +40,7 @@ namespace OptimusTraderBot
 			string cmd = string.Empty;
 			while(cmd != "exit")
 			{
-				if(Console.KeyAvailable && Console.ReadKey().Modifiers == 0)
+				if(Console.KeyAvailable)
 				{
 					if(backgroundWorker.IsBusy)
 					{
