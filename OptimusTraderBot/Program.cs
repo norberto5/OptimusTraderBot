@@ -71,57 +71,36 @@ namespace OptimusTraderBot
 			InfoResult info = apiManager.GetInfo();
 			Console.WriteLine($"Connection to API is {(info.Success ? "OK" : "NOT OK! Something went wrong!")}");
 
-			Console.WriteLine("Actual orders:");
+			Console.WriteLine(GetMonitoringMessage());
+		}
+
+		private static string GetMonitoringMessage()
+		{
+			var sb = new StringBuilder();
+			sb.AppendLine("Actual orders:");
 			List<Order> orders = apiManager.GetOrders();
 			foreach(Order order in orders)
-				Console.WriteLine(order);
+				sb.AppendLine(order.ToString());
 
-			Console.WriteLine(new string('-', 30));
+			sb.AppendLine(new string('-', 30));
 
-			Console.WriteLine("Actual OrderBook for LSK/PLN:");
+			sb.AppendLine("Actual OrderBook for LSK/PLN:");
 			OrderBookResult orderbookResult = apiManager.GetOrderBook("LSK", "PLN");
-			Console.WriteLine(orderbookResult.GetStringWithMarkedOrders(orders, 5, 5));
+			sb.AppendLine(orderbookResult.GetStringWithMarkedOrders(orders, 5, 5));
 
-			Console.WriteLine(new string('-', 30));
+			sb.AppendLine(new string('-', 30));
+
+			sb.Append(apiManager.GetInfo());
+
+			return sb.ToString();
 		}
 
 		private static void BackgroundWorkerDoWork(object sender, DoWorkEventArgs e)
 		{
-			List<Order> orders = apiManager.GetOrders();
 			while(true)
 			{
 				var worker = sender as BackgroundWorker;
-				if(worker.CancellationPending)
-				{
-					e.Cancel = true;
-					return;
-				}
-
-				var sb = new StringBuilder();
-				sb.AppendLine("Actual orders:");
-				List<Order> newOrders = apiManager.GetOrders();
-				foreach(Order order in newOrders)
-					sb.AppendLine(order.ToString());
-
-				sb.AppendLine(new string('-', 30));
-
-				sb.AppendLine("Actual OrderBook for LSK/PLN:");
-				OrderBookResult orderbookResult = apiManager.GetOrderBook("LSK", "PLN");
-				sb.AppendLine(orderbookResult.GetStringWithMarkedOrders(newOrders, 5, 5));
-
-				Console.Clear();
-				Console.WriteLine(sb);
-
-				if(orders.Count != newOrders.Count)
-				{
-					orders = newOrders;
-					Console.WriteLine("Orders changed!");
-					Console.Beep(500, 500);
-					Console.Beep(500, 500);
-					Console.Beep(500, 500);
-					break;
-				}
-
+				string msg = GetMonitoringMessage();
 				for(int i = 0; i < 104; i++)
 				{
 					if(worker.CancellationPending)
@@ -135,7 +114,7 @@ namespace OptimusTraderBot
 						Console.WriteLine($"{new string('-', Math.Min(i / 5, 10))}{new string('.', Math.Max(0, Math.Min(10 - i / 5, 10)))}" +
 							$"AUTOUPDATE" +
 							$"{(i < 50 ? new string('.', 10) : new string('-', Math.Min((i-50) / 5, 10)) + new string('.', Math.Min(10 - (i - 50) / 5, 10)))}");
-						Console.WriteLine(sb);
+						Console.WriteLine(msg);
 					}
 					Thread.Sleep(100);
 				}
