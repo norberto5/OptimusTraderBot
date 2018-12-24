@@ -40,7 +40,7 @@ namespace OptimusTraderBot
 			string cmd = string.Empty;
 			while(cmd != "exit")
 			{
-				if(Console.KeyAvailable)
+				if(Console.KeyAvailable && Console.ReadKey().Modifiers == 0)
 				{
 					if(backgroundWorker.IsBusy)
 					{
@@ -124,6 +124,11 @@ namespace OptimusTraderBot
 
 				for(int i = 0; i < 104; i++)
 				{
+					if(worker.CancellationPending)
+					{
+						e.Cancel = true;
+						return;
+					}
 					if(i % 5 == 0)
 					{
 						Console.Clear();
@@ -131,11 +136,6 @@ namespace OptimusTraderBot
 							$"AUTOUPDATE" +
 							$"{(i < 50 ? new string('.', 10) : new string('-', Math.Min((i-50) / 5, 10)) + new string('.', Math.Min(10 - (i - 50) / 5, 10)))}");
 						Console.WriteLine(sb);
-					}
-					if(worker.CancellationPending)
-					{
-						e.Cancel = true;
-						return;
 					}
 					Thread.Sleep(100);
 				}
